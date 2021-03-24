@@ -4,9 +4,6 @@ import javax.net.ServerSocketFactory;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -36,7 +33,8 @@ public class Server {
         fileName = args[1];
 
         // Create Dictionary
-        ConcurrentHashMap<String, String> dictionary = CreateDictionary(fileName);
+        //ConcurrentHashMap<String, String> dictionary = CreateDictionary(fileName);
+        DictionaryDataAccess dictionaryAccess = DictionaryDataAccess.getInstance(fileName);
 
         // Initialise ServerSocketFactory and Create Welcome Socket
         ServerSocketFactory factory = ServerSocketFactory.getDefault();

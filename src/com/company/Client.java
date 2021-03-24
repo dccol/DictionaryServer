@@ -32,6 +32,7 @@ public class Client {
             DataInputStream input = new DataInputStream(socket.getInputStream());
             DataOutputStream output = new DataOutputStream(socket.getOutputStream());
 
+            // Send the client request ie. Query, Insert, Delete, Update.
             String sendData ="I want to connect";
             output.writeUTF(sendData);
             System.out.println("Data sent to Server--> " + sendData);

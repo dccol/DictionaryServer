@@ -35,6 +35,7 @@ public class MyThread extends Thread{
             // Output Stream
             DataOutputStream output = new DataOutputStream(clientSocket.getOutputStream());
 
+            // Read the client request and perform action, ie. Query, Insert, Delete, Update
             System.out.println("CLIENT: "+input.readUTF());
 
             output.writeUTF("SERVER: Hi Client "+clientNumber+", this is "+threadName+" how may I help?");
