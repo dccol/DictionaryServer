@@ -17,9 +17,11 @@ public class Client {
         // READ IN COMMAND LINE ARGS
         if(args.length < 2){
             System.out.println("Missing Arguments. Please Try Again");
+            System.exit(0);
         }
         else if(args.length > 2){
             System.out.println("Too many Arguments. Please Try Again");
+            System.exit(0);
         }
         serverIp = args[0];
         serverPort = Integer.parseInt(args[1]);

@@ -24,9 +24,13 @@ public class Server {
         // READ IN COMMAND LINE ARGS
         if(args.length < 2){
             System.out.println("Missing Arguments. Please Try Again");
+            System.exit(0);
+
         }
         else if(args.length > 2){
             System.out.println("Too many Arguments. Please Try Again");
+            System.exit(0);
+
         }
         port = Integer.parseInt(args[0]);
         fileName = args[1];
@@ -47,10 +51,10 @@ public class Server {
                 // Create unique socket for client to communicate on
                 Socket client = server.accept();
                 counter++;
-                System.out.println("Client "+counter+": Applying for connection!");
+                System.out.println("CLIENT "+counter+": Applying for connection!");
 
                 // Start a new thread for a connection
-                MyThread t = new MyThread("Thread " + counter);
+                MyThread t = new MyThread(counter, client);
                 t.start();
             }
 
@@ -85,10 +89,10 @@ public class Server {
             }
             dictionaryReader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+            System.out.println("An error occurred. Please ensure the file path and name are correct.");
             e.printStackTrace();
         }
-        System.out.println(txt);
+        //System.out.println(txt);
         return txt;
     }
 }
