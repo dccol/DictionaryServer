@@ -52,7 +52,7 @@ public class Server {
                 System.out.println("CLIENT "+counter+": Applying for connection!");
 
                 // Start a new thread for a connection
-                MyThread t = new MyThread(counter, client);
+                MyThread t = new MyThread(counter, client, dictionaryAccess);
                 t.start();
             }
 
@@ -62,35 +62,5 @@ public class Server {
             e.printStackTrace();
         }
     }
-    private static ConcurrentHashMap<String, String> CreateDictionary(String fileName)
-    {
-        ConcurrentHashMap<String, String> dictionary = new ConcurrentHashMap<>();
-        String txt = ReadDictionaryTextFile(fileName);
-        String[] lines = txt.split(System.getProperty("line.separator"));
-        for(String line : lines){
-            String[] split = line.split("\\t");
-            dictionary.putIfAbsent(split[0], split[1]);
-            //System.out.println(dictionary.get(split[0]));
-        }
-        return dictionary;
-    }
-    private static String ReadDictionaryTextFile(String fileName)
-    {
-        // Open Text File
-        String txt = "";
-        try {
-            File dictionaryFile = new File(fileName);
-            Scanner dictionaryReader = new Scanner(dictionaryFile);
-            while (dictionaryReader.hasNextLine()) {
-                txt += dictionaryReader.nextLine();
-                txt += "\r\n";
-            }
-            dictionaryReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred. Please ensure the file path and name are correct.");
-            e.printStackTrace();
-        }
-        //System.out.println(txt);
-        return txt;
-    }
+
 }

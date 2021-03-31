@@ -1,2 +1,3 @@
 Apple	An apple is a round fruit
 Orange	An orange is the colour orange
+Orange	Orange is also a colour

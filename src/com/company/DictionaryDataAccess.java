@@ -3,6 +3,8 @@ import netscape.javascript.JSObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -10,7 +12,7 @@ public final class DictionaryDataAccess {
 
     private static DictionaryDataAccess instance = null;
 
-    private final ConcurrentHashMap<String, String> dictionary;
+    private final HashMap<String, ArrayList<String>> dictionary;
 
     private DictionaryDataAccess(String fileName){
         this.dictionary = CreateDictionary(fileName);
@@ -21,15 +23,29 @@ public final class DictionaryDataAccess {
         }
         return instance;
     }
-    private static ConcurrentHashMap<String, String> CreateDictionary(String fileName)
+    private static HashMap<String, ArrayList<String>> CreateDictionary(String fileName)
     {
-        ConcurrentHashMap<String, String> dictionary = new ConcurrentHashMap<>();
+        HashMap<String, ArrayList<String>> dictionary = new HashMap<>();
         String txt = ReadDictionaryTextFile(fileName);
         String[] lines = txt.split(System.getProperty("line.separator"));
         for(String line : lines){
             String[] split = line.split("\\t");
-            dictionary.putIfAbsent(split[0], split[1]);
-            //System.out.println(dictionary.get(split[0]));
+            String word = split[0];
+            String meaning = split[1];
+
+            // Check if the word already has a meaning.
+            // If no -> create new meaningList
+            // If yes -> update meaningList
+            ArrayList<String> meanings = dictionary.get(word);
+            if(meanings == null){
+                meanings = new ArrayList<>();
+                meanings.add(meaning);
+            }
+            else{
+                meanings.add(meaning);
+            }
+            dictionary.put(word, meanings);
+            System.out.println(dictionary.get(word));
         }
         return dictionary;
     }
@@ -52,20 +68,27 @@ public final class DictionaryDataAccess {
         //System.out.println(txt);
         return txt;
     }
-    private String QueryDictionary(String query)
+    private synchronized ArrayList<String> QueryDictionary(String query)
     {
         return this.dictionary.get(query);
     }
-    private String InsertWord(JSObject word)
+    private synchronized ArrayList<String> InsertWord(JSObject word)
     {
-        return this.dictionary.putIfAbsent(word.getMember("Key").toString(), word.getMember("Value").toString());
+        // Add all meanings into a List
+        ArrayList<String> meanings = new ArrayList<>();
+        meanings.add(word.getMember("Value").toString());
+
+        return this.dictionary.putIfAbsent(word.getMember("Key").toString(), meanings);
     }
-    private String DeleteWord(String word)
+    private synchronized ArrayList<String> DeleteWord(String word)
     {
         return this.dictionary.remove(word);
     }
-    private String UpdateWord(JSObject word)
+    private synchronized ArrayList<String> UpdateMeaning(JSObject word)
     {
-        return this.dictionary.replace(word.getMember("Key").toString(), word.getMember("Value").toString());
+        // Replace current list of meanings with new one specified
+        ArrayList<String> meanings = new ArrayList<>();
+        meanings.add(word.getMember("Value").toString());
+        return this.dictionary.replace(word.getMember("Key").toString(), meanings);
     }
 }

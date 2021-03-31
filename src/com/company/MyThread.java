@@ -11,10 +11,13 @@ public class MyThread extends Thread{
     private final Socket socket;
     private final int clientNumber;
 
-    MyThread(int counter, Socket socket) {
+    private DictionaryDataAccess dataAccess;
+
+    MyThread(int counter, Socket socket, DictionaryDataAccess dataAccess) {
         threadName = "Thread "+counter;
         this.socket = socket;
         this.clientNumber = counter;
+        this.dataAccess = dataAccess;
     }
 
     /**
