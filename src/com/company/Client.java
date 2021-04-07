@@ -3,8 +3,12 @@ package com.company;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Client {
 
@@ -33,9 +37,14 @@ public class Client {
             DataOutputStream output = new DataOutputStream(socket.getOutputStream());
 
             // Send the client request ie. Query, Insert, Delete, Update.
-            String sendData ="I want to connect";
-            output.writeUTF(sendData);
-            System.out.println("Data sent to Server--> " + sendData);
+            JSONObject obj = new JSONObject();
+
+            obj.put("Word", "Hello");
+            obj.put("Meaning", "World");
+
+            output.writeUTF(obj.toString());
+            System.out.println("Data sent to Server--> " + obj.toString());
+
             output.flush();
 
             while(true && input.available() > 0)
@@ -51,8 +60,9 @@ public class Client {
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            System.out.println("Connection Refused. Server not available");
         }
+
 
     }
 }

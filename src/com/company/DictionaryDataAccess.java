@@ -1,12 +1,18 @@
 package com.company;
+import Exceptions.WordAlreadyExists;
+import Exceptions.WordNotFound;
 import netscape.javascript.JSObject;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public final class DictionaryDataAccess {
 
@@ -68,27 +74,59 @@ public final class DictionaryDataAccess {
         //System.out.println(txt);
         return txt;
     }
-    private synchronized ArrayList<String> QueryDictionary(String query)
+    public synchronized ArrayList<String> QueryDictionary(String query) throws WordNotFound
     {
-        return this.dictionary.get(query);
+        ArrayList<String> meanings = this.dictionary.get(query);
+        if(meanings == null){
+            throw new WordNotFound("The word you are looking for can not be found. Please insert the word," +
+                    "or query another word.");
+        }else{
+            return meanings;
+        }
     }
-    private synchronized ArrayList<String> InsertWord(JSObject word)
+    public synchronized int InsertWord(JSONObject insertObject) throws WordAlreadyExists
     {
         // Add all meanings into a List
-        ArrayList<String> meanings = new ArrayList<>();
-        meanings.add(word.getMember("Value").toString());
+        ArrayList<String> meaningList = new ArrayList<>();
+        JSONArray meanings = insertObject.getJSONArray("Meanings");
+        for( Object meaning : meanings){
+            meaningList.add(meaning.toString());
+        }
+        ArrayList<String> oldMeanings = dictionary.get(insertObject.get("Word").toString());
+        if(oldMeanings == null){
+            dictionary.put(insertObject.get("Word").toString(), meaningList);
+        }
+        else{
+            throw new WordAlreadyExists("The word you are trying to Insert already exists in the dictionary. " +
+                    "Please use the update functionality if you wish to overwrite it's current meanings.");
+        }
+        return 1;
+    }
 
-        return this.dictionary.putIfAbsent(word.getMember("Key").toString(), meanings);
-    }
-    private synchronized ArrayList<String> DeleteWord(String word)
+    public synchronized ArrayList<String> DeleteWord(String word) throws WordNotFound
     {
-        return this.dictionary.remove(word);
+        ArrayList<String> deletedMeanings = this.dictionary.remove(word);
+
+        if(deletedMeanings == null){
+            throw new WordNotFound("The word you are trying to delete could not be found.");
+        }
+        return deletedMeanings;
     }
-    private synchronized ArrayList<String> UpdateMeaning(JSObject word)
+    public synchronized ArrayList<String> UpdateMeaning(JSONObject updateObject) throws WordNotFound
     {
         // Replace current list of meanings with new one specified
-        ArrayList<String> meanings = new ArrayList<>();
-        meanings.add(word.getMember("Value").toString());
-        return this.dictionary.replace(word.getMember("Key").toString(), meanings);
+        ArrayList<String> meaningList = new ArrayList<>();
+        JSONArray meanings = updateObject.getJSONArray("Meanings");
+        for( Object meaning : meanings){
+            meaningList.add(meaning.toString());
+        }
+
+        ArrayList<String> oldMeanings = this.dictionary.replace(updateObject.get("Key").toString(), meaningList);
+        if(oldMeanings == null){
+            throw new WordNotFound("The word you are trying to update does not exist.");
+        }
+        else {
+            return oldMeanings;
+        }
     }
 }

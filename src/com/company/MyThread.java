@@ -1,7 +1,14 @@
 package com.company;
 
+import Exceptions.WordAlreadyExists;
+import Exceptions.WordNotFound;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.simple.JSONValue;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -39,13 +46,49 @@ public class MyThread extends Thread{
             DataOutputStream output = new DataOutputStream(clientSocket.getOutputStream());
 
             // Read the client request and perform action, ie. Query, Insert, Delete, Update
-            System.out.println("CLIENT: "+input.readUTF());
+            // Client will send json object specifying which method to use and the parameters for that method
+            String rec = "";
+            JSONObject jsonObject = new JSONObject();
+            try {
+                while (true) {
+                    rec += input.readUTF();
+                }
+            } catch (EOFException e) { }
+            finally{
+                // Build Query
+                Object obj = JSONValue.parse(rec);
+                jsonObject = (JSONObject) obj;
+            }
+
+            String method = (String) jsonObject.get("Method");
+            if(method.equals("Query")){
+                dataAccess.QueryDictionary(jsonObject.get("Word").toString());
+            }
+            else if(method.equals("Insert")){
+                dataAccess.InsertWord(jsonObject);
+            }
+            else if(method.equals("Delete")){
+                dataAccess.DeleteWord(jsonObject.get("Word").toString());
+            }
+            else if(method.equals("Update")){
+                dataAccess.UpdateMeaning(jsonObject);
+            }
+            else{
+                //Error
+            }
 
             output.writeUTF("SERVER: Hi Client "+clientNumber+", this is "+threadName+" how may I help?");
         }
         catch (IOException e)
         {
             e.printStackTrace();
+        } catch (WordAlreadyExists e) {
+            // Send message back to the client
+            String message = e.getMessage();
+            System.out.println(message);
+        } catch (WordNotFound e) {
+            String message = e.getMessage();
+            System.out.println(message);
         }
     }
 
