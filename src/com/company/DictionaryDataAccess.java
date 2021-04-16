@@ -84,7 +84,7 @@ public final class DictionaryDataAccess {
             return meanings;
         }
     }
-    public synchronized int InsertWord(JSONObject insertObject) throws WordAlreadyExists
+    public synchronized ArrayList<String> InsertWord(JSONObject insertObject) throws WordAlreadyExists
     {
         // Add all meanings into a List
         ArrayList<String> meaningList = new ArrayList<>();
@@ -100,7 +100,7 @@ public final class DictionaryDataAccess {
             throw new WordAlreadyExists("The word you are trying to Insert already exists in the dictionary. " +
                     "Please use the update functionality if you wish to overwrite it's current meanings.");
         }
-        return 1;
+        return meaningList;
     }
 
     public synchronized ArrayList<String> DeleteWord(String word) throws WordNotFound

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,9 +40,12 @@ public class Client {
             // Send the client request ie. Query, Insert, Delete, Update.
             JSONObject obj = new JSONObject();
 
-            obj.put("Word", "Orange");
-            obj.put("Meaning", "World");
-            obj.put("Method", "Query");
+            ArrayList<String> meanings = new ArrayList<>();
+            meanings.add("World");
+            meanings.add("Hi");
+            obj.put("Word", "Hello");
+            obj.put("Meanings", meanings.toArray());
+            obj.put("Method", "Insert");
 
             System.out.println("Data sent to Server--> " + obj.toString());
             output.writeUTF(obj.toString());

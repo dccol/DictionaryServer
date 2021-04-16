@@ -53,7 +53,6 @@ public class MyThread extends Thread{
                     // Attempt to convert read data to JSON
                     JSONObject jsonObject = new JSONObject(input.readUTF());
 
-//                    org.json.simple.JSONObject jsonObject = (org.json.simple.JSONObject) parser.parse(input.readUTF());
                     System.out.println("COMMAND RECEIVED:   "+jsonObject.toString());
                     ArrayList<String> result = executeCommand(jsonObject);
                     output.writeUTF("Server: " + result.toString());
@@ -76,7 +75,7 @@ public class MyThread extends Thread{
             if (method.equals("Query")) {
                 result = dataAccess.QueryDictionary(jsonObject.get("Word").toString());
             } else if (method.equals("Insert")) {
-                dataAccess.InsertWord(jsonObject);
+                result = dataAccess.InsertWord(jsonObject);
             } else if (method.equals("Delete")) {
                 result = dataAccess.DeleteWord(jsonObject.get("Word").toString());
             } else if (method.equals("Update")) {
