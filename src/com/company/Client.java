@@ -39,19 +39,20 @@ public class Client {
             // Send the client request ie. Query, Insert, Delete, Update.
             JSONObject obj = new JSONObject();
 
-            obj.put("Word", "Hello");
+            obj.put("Word", "Orange");
             obj.put("Meaning", "World");
+            obj.put("Method", "Query");
 
-            output.writeUTF(obj.toString());
             System.out.println("Data sent to Server--> " + obj.toString());
+            output.writeUTF(obj.toString());
 
             output.flush();
 
-            while(true && input.available() > 0)
-            {
-                String message = input.readUTF();
-                System.out.println(message);
-            }
+
+            // Read result from server
+            String message = input.readUTF();
+            System.out.println(message);
+
 
         }
         catch (UnknownHostException e)
