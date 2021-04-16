@@ -40,12 +40,30 @@ public class Client {
             // Send the client request ie. Query, Insert, Delete, Update.
             JSONObject obj = new JSONObject();
 
+            // Query test
+//            obj.put("Word", "Orange");
+//            obj.put("Method", "Query");
+
+            // Insert Test
+//            ArrayList<String> meanings = new ArrayList<>();
+//            meanings.add("World");
+//            meanings.add("Hi");
+//            obj.put("Word", "Hello");
+//            obj.put("Meanings", meanings.toArray());
+//            obj.put("Method", "Insert");
+
+            // Update
             ArrayList<String> meanings = new ArrayList<>();
-            meanings.add("World");
-            meanings.add("Hi");
-            obj.put("Word", "Hello");
+            meanings.add("An orange is a fruit");
+            meanings.add("An orange is good looking little fella");
+            obj.put("Word", "Orange");
             obj.put("Meanings", meanings.toArray());
-            obj.put("Method", "Insert");
+            obj.put("Method", "Update");
+
+            // Delete
+//            obj.put("Word", "Apple");
+//            obj.put("Method", "Delete");
+
 
             System.out.println("Data sent to Server--> " + obj.toString());
             output.writeUTF(obj.toString());

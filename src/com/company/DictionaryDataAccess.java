@@ -121,7 +121,7 @@ public final class DictionaryDataAccess {
             meaningList.add(meaning.toString());
         }
 
-        ArrayList<String> oldMeanings = this.dictionary.replace(updateObject.get("Key").toString(), meaningList);
+        ArrayList<String> oldMeanings = this.dictionary.replace(updateObject.get("Word").toString(), meaningList);
         if(oldMeanings == null){
             throw new WordNotFound("The word you are trying to update does not exist.");
         }
