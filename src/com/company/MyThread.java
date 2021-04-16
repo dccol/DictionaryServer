@@ -67,6 +67,8 @@ public class MyThread extends Thread{
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
+        } catch (InvalidCommand invalidCommand) {
+            invalidCommand.printStackTrace();
         }
     }
 
