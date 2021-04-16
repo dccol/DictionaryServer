@@ -29,7 +29,13 @@ public class Client {
             System.exit(0);
         }
         serverIp = args[0];
-        serverPort = Integer.parseInt(args[1]);
+        try {
+            serverPort = Integer.parseInt(args[1]);
+        }
+        catch(NumberFormatException e){
+            System.out.println("The port number must be an integer.");
+            System.exit(0);
+        }
 
         try(Socket socket = new Socket(serverIp, serverPort);)
         {
@@ -79,11 +85,11 @@ public class Client {
         }
         catch (UnknownHostException e)
         {
-            e.printStackTrace();
+            System.out.println("The specified host could not be found.");
         }
         catch (IOException e)
         {
-            System.out.println("Connection Refused. Server not available");
+            System.out.println("Connection Refused. Server not available.");
         }
 
 
