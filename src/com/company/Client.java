@@ -41,8 +41,8 @@ public class Client {
             JSONObject obj = new JSONObject();
 
             // Query test
-//            obj.put("Word", "Orange");
-//            obj.put("Method", "Query");
+            obj.put("Word", "Orange");
+            obj.put("Method", "Query");
 
             // Insert Test
 //            ArrayList<String> meanings = new ArrayList<>();
@@ -53,12 +53,12 @@ public class Client {
 //            obj.put("Method", "Insert");
 
             // Update
-            ArrayList<String> meanings = new ArrayList<>();
-            meanings.add("An orange is a fruit");
-            meanings.add("An orange is good looking little fella");
-            obj.put("Word", "Orange");
-            obj.put("Meanings", meanings.toArray());
-            obj.put("Method", "Update");
+//            ArrayList<String> meanings = new ArrayList<>();
+//            meanings.add("An orange is a fruit");
+//            meanings.add("An orange is good looking little fella");
+//            obj.put("Word", "Orange");
+//            obj.put("Meanings", meanings.toArray());
+//            obj.put("Method", "Update");
 
             // Delete
 //            obj.put("Word", "Apple");

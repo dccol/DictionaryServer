@@ -29,11 +29,16 @@ public class Server {
             System.exit(0);
 
         }
-        port = Integer.parseInt(args[0]);
+        try {
+            port = Integer.parseInt(args[0]);
+        }
+        catch(NumberFormatException e){
+            System.out.println("The port number must be an integer.");
+            System.exit(0);
+        }
         fileName = args[1];
 
         // Create Dictionary
-        //ConcurrentHashMap<String, String> dictionary = CreateDictionary(fileName);
         DictionaryDataAccess dictionaryAccess = DictionaryDataAccess.getInstance(fileName);
 
         // Initialise ServerSocketFactory and Create Welcome Socket
