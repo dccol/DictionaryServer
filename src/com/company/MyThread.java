@@ -4,10 +4,7 @@ import Exceptions.InvalidCommand;
 import Exceptions.WordAlreadyExists;
 import Exceptions.WordNotFound;
 import org.json.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONObject;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -44,8 +41,6 @@ public class MyThread extends Thread{
     {
         try(Socket clientSocket = client)
         {
-            JSONParser parser = new JSONParser();
-
             // Input stream
             DataInputStream input = new DataInputStream(clientSocket.getInputStream());
             // Output Stream
@@ -56,8 +51,10 @@ public class MyThread extends Thread{
             while(true){
                 if(input.available() > 0){
                     // Attempt to convert read data to JSON
-                    org.json.simple.JSONObject jsonObject = (org.json.simple.JSONObject) parser.parse(input.readUTF());
-                    System.out.println("COMMAND RECEIVED: "+jsonObject.toString());
+                    JSONObject jsonObject = new JSONObject(input.readUTF());
+
+//                    org.json.simple.JSONObject jsonObject = (org.json.simple.JSONObject) parser.parse(input.readUTF());
+                    System.out.println("COMMAND RECEIVED:   "+jsonObject.toString());
                     ArrayList<String> result = executeCommand(jsonObject);
                     output.writeUTF("Server: " + result.toString());
                 }
@@ -65,14 +62,12 @@ public class MyThread extends Thread{
         }
         catch (IOException e) {
             e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
         } catch (InvalidCommand invalidCommand) {
             invalidCommand.printStackTrace();
         }
     }
 
-    private ArrayList<String> executeCommand(org.json.simple.JSONObject jsonObject) throws InvalidCommand {
+    private ArrayList<String> executeCommand(org.json.JSONObject jsonObject) throws InvalidCommand {
 
         ArrayList<String> result = new ArrayList<>();
 
@@ -81,21 +76,16 @@ public class MyThread extends Thread{
             if (method.equals("Query")) {
                 result = dataAccess.QueryDictionary(jsonObject.get("Word").toString());
             } else if (method.equals("Insert")) {
-                //dataAccess.InsertWord(jsonObject);
+                dataAccess.InsertWord(jsonObject);
             } else if (method.equals("Delete")) {
                 result = dataAccess.DeleteWord(jsonObject.get("Word").toString());
             } else if (method.equals("Update")) {
-                //result = dataAccess.UpdateMeaning(jsonObject);
+                result = dataAccess.UpdateMeaning(jsonObject);
             } else {
                 throw new InvalidCommand("The command does not specify a valid action to perform.");
             }
         }
-//        } catch (WordAlreadyExists e) {
-//            // Send message back to the client
-//            String message = e.getMessage();
-//            System.out.println(message);
-//        }
-        catch (WordNotFound e) {
+        catch (WordNotFound | WordAlreadyExists e) {
         String message = e.getMessage();
         System.out.println(message);
         }
