@@ -7,11 +7,13 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.font.TextAttribute;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Map;
 
 public class MainWindow {
 
@@ -29,7 +31,7 @@ public class MainWindow {
     private JLabel insertWordLabel;
     private JLabel insertMeaningLabel;
     private JTextField insertWordField;
-    private JTextField insertWordMeanings;
+    private JTextArea insertWordMeanings;
     private JButton insertButton;
     private JTextArea insertResult;
 
@@ -38,7 +40,7 @@ public class MainWindow {
     private JLabel updateWordLabel;
     private JLabel updateMeaningLabel;
     private JTextField updateWordField;
-    private JTextField updateMeaningField;
+    private JTextArea updateMeaningField;
     private JButton updateButton;
     private JTextArea updateResult;
 
@@ -90,8 +92,13 @@ public class MainWindow {
         frame.setContentPane(contentPane);
         contentPane.setLayout(null);
 
+
         /** QUERY **/
         queryLabel = new JLabel("Query");
+        Font font = queryLabel.getFont();
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        queryLabel.setFont(font.deriveFont(attributes));
         queryLabel.setBounds(10, 10, 46, 13);
         contentPane.add(queryLabel);
 
@@ -108,88 +115,110 @@ public class MainWindow {
         contentPane.add(queryButton);
 
         queryResult = new JTextArea();
-        queryResult.setBounds(10, 90, 200, 21);
+        queryResult.setBounds(10, 90, 200, 60);
         contentPane.add(queryResult);
 
         /** INSERT **/
         JLabel insertLabel = new JLabel("Insert");
-        insertLabel.setBounds(300, 10, 46, 13);
+        Font font2 = insertLabel.getFont();
+        Map attributes2 = font2.getAttributes();
+        attributes2.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        insertLabel.setFont(font.deriveFont(attributes2));
+        insertLabel.setBounds(300, 160, 46, 13);
         contentPane.add(insertLabel);
 
         insertWordLabel = new JLabel("Word");
-        insertWordLabel.setBounds(300, 30, 46, 13);
+        insertWordLabel.setBounds(300, 180, 46, 13);
         contentPane.add(insertWordLabel);
         insertWordField = new JTextField();
-        insertWordField.setBounds(300, 45, 96, 19);
+        insertWordField.setBounds(300, 195, 96, 19);
         contentPane.add(insertWordField);
         insertWordField.setColumns(10);
 
         insertMeaningLabel = new JLabel("Meanings");
-        insertMeaningLabel.setBounds(300, 70, 70, 13);
+        insertMeaningLabel.setBounds(300, 215, 70, 13);
         contentPane.add(insertMeaningLabel);
-        insertWordMeanings = new JTextField();
-        insertWordMeanings.setBounds(300, 85, 200, 50);
-        contentPane.add(insertWordMeanings);
+        insertWordMeanings = new JTextArea();
+        insertWordMeanings.setBounds(300, 230, 200, 50);
+        JScrollPane scrollPane = new JScrollPane( insertWordMeanings );
+        scrollPane.setBounds(300, 230, 270, 60);
+        contentPane.add(scrollPane);
+        //contentPane.add(insertWordMeanings);
         insertWordMeanings.setColumns(10);
 
         insertButton = new JButton("Insert");
-        insertButton.setBounds(300, 140, 85, 21);
+        insertButton.setBounds(300, 290, 85, 21);
         contentPane.add(insertButton);
 
         insertResult = new JTextArea();
-        insertResult.setBounds(300, 170, 200, 21);
+        insertResult.setBounds(300, 315, 270, 60);
         contentPane.add(insertResult);
 
         /** UPDATE **/
         JLabel updateLabel = new JLabel("Update");
-        updateLabel.setBounds(10, 200, 46, 13);
+        Font font3 = updateLabel.getFont();
+        Map attributes3 = font3.getAttributes();
+        attributes3.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        updateLabel.setFont(font.deriveFont(attributes3));
+        updateLabel.setBounds(10, 160, 46, 13);
         contentPane.add(updateLabel);
 
         updateWordLabel = new JLabel("Word");
-        updateWordLabel.setBounds(10, 220, 46, 13);
+        updateWordLabel.setBounds(10, 180, 46, 13);
         contentPane.add(updateWordLabel);
         updateWordField = new JTextField();
-        updateWordField.setBounds(10, 235, 96, 19);
+        updateWordField.setBounds(10, 195, 96, 19);
         contentPane.add(updateWordField);
         updateWordField.setColumns(10);
 
         updateMeaningLabel = new JLabel("Meanings");
-        updateMeaningLabel.setBounds(10, 255, 70, 13);
+        updateMeaningLabel.setBounds(10, 215, 70, 13);
         contentPane.add(updateMeaningLabel);
-        updateMeaningField = new JTextField();
-        updateMeaningField.setBounds(10, 270, 200, 50);
-        contentPane.add(updateMeaningField);
+        updateMeaningField = new JTextArea();
+        updateMeaningField.setBounds(10, 230, 200, 50);
+        JScrollPane scrollPane2 = new JScrollPane( updateMeaningField );
+        scrollPane2.setBounds(10, 230, 200, 60);
+        contentPane.add(scrollPane2);
+        //contentPane.add(updateMeaningField);
         updateMeaningField.setColumns(10);
 
         updateButton = new JButton("Update");
-        updateButton.setBounds(10, 325, 85, 21);
+        updateButton.setBounds(10, 290, 85, 21);
         contentPane.add(updateButton);
 
         updateResult = new JTextArea();
-        updateResult.setBounds(10, 355, 200, 21);
+        updateResult.setBounds(10, 315, 270, 60);
         contentPane.add(updateResult);
 
         /** DELETE **/
         JLabel deleteLabel = new JLabel("Delete");
-        deleteLabel.setBounds(300, 200, 46, 13);
+        Font font4 = deleteLabel.getFont();
+        Map attributes4 = font4.getAttributes();
+        attributes4.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        deleteLabel.setFont(font.deriveFont(attributes4));
+        deleteLabel.setBounds(300, 10, 46, 13);
         contentPane.add(deleteLabel);
 
         deleteWordLabel = new JLabel("Word");
-        deleteWordLabel.setBounds(300, 220, 46, 13);
+        deleteWordLabel.setBounds(300, 30, 46, 13);
         contentPane.add(deleteWordLabel);
         deleteWordField = new JTextField();
-        deleteWordField.setBounds(300, 235, 96, 19);
+        deleteWordField.setBounds(300, 45, 96, 19);
         contentPane.add(deleteWordField);
         deleteWordField.setColumns(10);
 
         deleteButton = new JButton("Delete");
-        deleteButton.setBounds(300, 255, 85, 21);
+        deleteButton.setBounds(300, 65, 85, 21);
         contentPane.add(deleteButton);
 
         deleteResult = new JTextArea();
-        deleteResult.setBounds(300, 285, 200, 21);
+        deleteResult.setBounds(300, 90, 200, 60);
         contentPane.add(deleteResult);
 
+        /** ACTIONS
+         *      Send Requests to the Server
+         *      One request per socket
+         *      One thread per request on the server **/
         queryButton.addActionListener(arg0 -> {
             System.out.println("Button clicked!" + arg0.toString());
             // Open a socket per request
@@ -212,6 +241,7 @@ public class MainWindow {
 
                 // Read result from server
                 String message = input.readUTF();
+                queryResult.setText(null);
                 queryResult.append(message + "\n");
 
             } catch (IOException e) {
@@ -231,11 +261,10 @@ public class MainWindow {
                 // Send the client request ie. Query, Insert, Delete, Update.
                 JSONObject obj = new JSONObject();
 
-                // Insert test
-                obj.put("Word", insertWordField.getText());
+                String[] meanings  = insertWordMeanings.getText().split("\n");
 
-                // Parse Meanings first
-                obj.put("Meanings", insertWordMeanings.getText());
+                obj.put("Word", insertWordField.getText());
+                obj.put("Meanings", meanings);
                 obj.put("Method", "Insert");
 
                 System.out.println("Data sent to Server--> " + obj.toString());
@@ -244,7 +273,8 @@ public class MainWindow {
 
                 // Read result from server
                 String message = input.readUTF();
-                queryResult.append(message + "\n");
+                insertResult.setText(null);
+                insertResult.append(message + "\n");
 
             } catch (IOException e) {
                 System.out.println("Exception sending data");
@@ -262,11 +292,10 @@ public class MainWindow {
                 // Send the client request ie. Query, Insert, Delete, Update.
                 JSONObject obj = new JSONObject();
 
-                // Query test
-                obj.put("Word", updateWordField.getText());
+                String[] meanings  = updateMeaningField.getText().split("\n");
 
-                // Parse meanings first
-                obj.put("Meanings", updateMeaningField.getText());
+                obj.put("Word", updateWordField.getText());
+                obj.put("Meanings", meanings);
                 obj.put("Method", "Update");
 
                 System.out.println("Data sent to Server--> " + obj.toString());
@@ -275,7 +304,8 @@ public class MainWindow {
 
                 // Read result from server
                 String message = input.readUTF();
-                queryResult.append(message + "\n");
+                updateResult.setText(null);
+                updateResult.append(message + "\n");
 
             } catch (IOException e) {
                 System.out.println("Exception sending data");
@@ -303,7 +333,8 @@ public class MainWindow {
 
                 // Read result from server
                 String message = input.readUTF();
-                queryResult.append(message + "\n");
+                deleteResult.setText(null);
+                deleteResult.append(message + "\n");
 
             } catch (IOException e) {
                 System.out.println("Exception sending data");

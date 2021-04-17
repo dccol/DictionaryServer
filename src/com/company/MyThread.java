@@ -56,7 +56,7 @@ public class MyThread extends Thread{
 
                     System.out.println("COMMAND RECEIVED:   " + jsonObject.toString());
                     String result = executeCommand(jsonObject);
-                    output.writeUTF("Server: " + result.toString());
+                    output.writeUTF(result.toString());
                     break;
                 }
             }
