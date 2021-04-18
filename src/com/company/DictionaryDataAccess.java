@@ -8,8 +8,11 @@ import netscape.javascript.JSObject;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,7 +26,7 @@ public final class DictionaryDataAccess {
     private final HashMap<String, ArrayList<String>> dictionary;
 
     private DictionaryDataAccess(String fileName){
-        this.dictionary = CreateDictionary(fileName);
+        this.dictionary = createDictionary(fileName);
     }
     public static synchronized DictionaryDataAccess getInstance(String fileName) {
         if(instance == null){
@@ -31,33 +34,40 @@ public final class DictionaryDataAccess {
         }
         return instance;
     }
-    private static HashMap<String, ArrayList<String>> CreateDictionary(String fileName)
+    private static HashMap<String, ArrayList<String>> createDictionary(String fileName)
     {
-        HashMap<String, ArrayList<String>> dictionary = new HashMap<>();
-        String txt = ReadDictionaryTextFile(fileName);
-        String[] lines = txt.split(System.getProperty("line.separator"));
-        for(String line : lines){
-            String[] split = line.split("\\t");
-            String word = split[0];
-            String meaning = split[1];
+        try {
+            HashMap<String, ArrayList<String>> dictionary = new HashMap<>();
+            String txt = readDictionaryTextFile(fileName);
+            String[] lines = txt.split(System.getProperty("line.separator"));
+            for (String line : lines) {
+                String[] split = line.split("\\t");
+                String word = split[0];
+                String meaning = split[1];
 
-            // Check if the word already has a meaning.
-            // If no -> create new meaningList
-            // If yes -> update meaningList
-            ArrayList<String> meanings = dictionary.get(word);
-            if(meanings == null){
-                meanings = new ArrayList<>();
-                meanings.add(meaning);
+                // Check if the word already has a meaning.
+                // If no -> create new meaningList
+                // If yes -> update meaningList
+                ArrayList<String> meanings = dictionary.get(word);
+                if (meanings == null) {
+                    meanings = new ArrayList<>();
+                    meanings.add(meaning);
+                } else {
+                    meanings.add(meaning);
+                }
+                dictionary.put(word, meanings);
             }
-            else{
-                meanings.add(meaning);
-            }
-            dictionary.put(word, meanings);
-            System.out.println(dictionary.get(word));
+            return dictionary;
+        }catch(ArrayIndexOutOfBoundsException e){
+            System.out.println("Error: the dictionary file does not match required format.\n" +
+                    "Please ensure the specified file is tab delimited in format:\n" +
+                    "<Word>\t<Meaning>\n" +
+                    "<Word2>\t<Meaning2>\n");
+            System.exit(0);
+            return null;
         }
-        return dictionary;
     }
-    private static String ReadDictionaryTextFile(String fileName)
+    private static String readDictionaryTextFile(String fileName)
     {
         // Open Text File
         String txt = "";
@@ -73,10 +83,29 @@ public final class DictionaryDataAccess {
             System.out.println("An error occurred. Please ensure the dictionary file path and name are correct.");
             System.exit(0);
         }
-        //System.out.println(txt);
         return txt;
     }
-    public synchronized String QueryDictionary(String query) throws InvalidCommand
+
+    public void saveDictionaryToFile(String filename)
+    {
+        try {
+            FileWriter dictionaryWriter = new FileWriter(filename);
+            for (Map.Entry<String, ArrayList<String>> entry : dictionary.entrySet()) {
+                String word = entry.getKey();
+                ArrayList<String> meanings = entry.getValue();
+                for(String meaning : meanings){
+                    dictionaryWriter.write(word + "\t" + meaning + "\n");
+                }
+            }
+            dictionaryWriter.close();
+            System.out.println("Successfully wrote to the file");
+        } catch ( IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    public synchronized String queryDictionary(String query) throws InvalidCommand
     {
         // Validate query
         if(query.length() == 0){
@@ -92,7 +121,7 @@ public final class DictionaryDataAccess {
             return meanings.toString();
         }
     }
-    public synchronized String InsertWord(JSONObject insertObject) throws InvalidCommand
+    public synchronized String insertWord(JSONObject insertObject) throws InvalidCommand
     {
         // Add all meanings into a List
         ArrayList<String> meaningList = new ArrayList<>();
@@ -122,7 +151,7 @@ public final class DictionaryDataAccess {
         }
     }
 
-    public synchronized String DeleteWord(String word) throws InvalidCommand
+    public synchronized String deleteWord(String word) throws InvalidCommand
     {
         // Validate query
         if(word.length() == 0){
@@ -137,7 +166,7 @@ public final class DictionaryDataAccess {
         }
         return "Success";
     }
-    public synchronized String UpdateMeaning(JSONObject updateObject) throws InvalidCommand
+    public synchronized String updateMeaning(JSONObject updateObject) throws InvalidCommand
     {
         // Replace current list of meanings with new one specified
         ArrayList<String> meaningList = new ArrayList<>();

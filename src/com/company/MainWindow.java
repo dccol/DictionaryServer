@@ -238,7 +238,6 @@ public class MainWindow {
          *      One request per socket
          *      One thread per request on the server **/
         queryButton.addActionListener(arg0 -> {
-            System.out.println("Button clicked!" + arg0.toString());
             // Open a socket per request
             try(Socket socket = new Socket(serverIP, serverPort))
             {
@@ -268,12 +267,11 @@ public class MainWindow {
 
                 }
             } catch (IOException e) {
-                System.out.println("Exception sending data");
+                queryResult.setText("Error: The Client has lost connection to the Server");
             }
         });
 
         insertButton.addActionListener(arg0 -> {
-            System.out.println("Button clicked!" + arg0.toString());
             // Open a socket per request
             try(Socket socket = new Socket(serverIP, serverPort))
             {
@@ -300,7 +298,7 @@ public class MainWindow {
                 insertResult.append(message + "\n");
 
             } catch (IOException e) {
-                System.out.println("Exception sending data");
+                insertResult.setText("Error: The Client has lost connection to the Server");
             }
         });
 
@@ -331,7 +329,7 @@ public class MainWindow {
                 updateResult.append(message + "\n");
 
             } catch (IOException e) {
-                System.out.println("Exception sending data");
+                updateResult.setText("Error: The Client has lost connection to the Server");
             }
         });
 
@@ -360,7 +358,7 @@ public class MainWindow {
                 deleteResult.append(message + "\n");
 
             } catch (IOException e) {
-                System.out.println("Exception sending data");
+                deleteResult.setText("Error: The Client has lost connection to the Server");
             }
         });
     }

@@ -16,6 +16,9 @@ public class Server {
     // Dictionary Filename
     private static String fileName;
 
+    // GUI
+    private static ServerInterface window;
+
     public static void main(String[] args) {
 
         // READ IN COMMAND LINE ARGS
@@ -40,6 +43,9 @@ public class Server {
 
         // Create Dictionary
         DictionaryDataAccess dictionaryAccess = DictionaryDataAccess.getInstance(fileName);
+
+        window = new ServerInterface(dictionaryAccess, fileName);
+        window.run();
 
         // Initialise ServerSocketFactory and Create Welcome Socket
         ServerSocketFactory factory = ServerSocketFactory.getDefault();

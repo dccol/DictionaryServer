@@ -1,3 +1,6 @@
-Apple	An apple is a round fruit
-Orange	An orange is the colour orange
-Orange	Orange is also a colour
+Java	is not cool
+Java	and smells
+Big	large
+Apple	is round
+Orange	is a fruit
+Orange	is a colour

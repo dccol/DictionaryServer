@@ -81,16 +81,16 @@ public class MyThread extends Thread{
             String method = (String) jsonObject.get("Method");
             switch (method) {
                 case "Query":
-                    result = dataAccess.QueryDictionary(jsonObject.get("Word").toString());
+                    result = dataAccess.queryDictionary(jsonObject.get("Word").toString());
                     break;
                 case "Insert":
-                    result = dataAccess.InsertWord(jsonObject);
+                    result = dataAccess.insertWord(jsonObject);
                     break;
                 case "Delete":
-                    result = dataAccess.DeleteWord(jsonObject.get("Word").toString());
+                    result = dataAccess.deleteWord(jsonObject.get("Word").toString());
                     break;
                 case "Update":
-                    result = dataAccess.UpdateMeaning(jsonObject);
+                    result = dataAccess.updateMeaning(jsonObject);
                     break;
                 default:
                     throw new InvalidCommand("The command does not specify a valid action to perform.");
