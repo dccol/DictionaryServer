@@ -41,7 +41,11 @@ public class Client {
         }
 
         // Test server before proceeding
-        try(Socket socket = new Socket(serverIp, serverPort)){
+        try{
+            Socket socket = new Socket(serverIp, serverPort);
+            // Open GUI
+            window = new MainWindow(socket);
+            window.run();
         } catch (UnknownHostException e) {
             System.out.println("Unknown Host.");
             System.exit(0);
@@ -49,9 +53,6 @@ public class Client {
             System.out.println("Connection Refused.");
             System.exit(0);
         }
-
-        // Open GUI
-        window = new MainWindow(serverIp, serverPort);
-        window.run();
+        System.out.println("Client exiting");
     }
 }

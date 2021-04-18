@@ -53,22 +53,21 @@ public class MyThread extends Thread{
 
             // Read the client request and perform action, ie. Query, Insert, Delete, Update
             // Client will send json object specifying which method to use and the parameters for that method
-            try {
-                while (true) {
-                    if (input.available() > 0) {
-                        // Attempt to convert read data to JSON
+            while (true) {
+                if (input.available() > 0) {
+                    // Attempt to convert read data to JSON
+                    try {
                         JSONObject jsonObject = new JSONObject(input.readUTF());
 
                         System.out.println("COMMAND RECEIVED:   " + jsonObject.toString());
                         String result = executeCommand(jsonObject);
                         output.writeUTF(result);
-                        break;
+                        //break;
+                    }catch(InvalidCommand e){
+                        // Send error back to client
+                        output.writeUTF(e.getMessage());
                     }
                 }
-            }
-            catch(InvalidCommand e){
-                // Send error back to client
-                output.writeUTF(e.getMessage());
             }
         }
         catch (IOException e) {

@@ -64,7 +64,7 @@ public class Server {
                 // Create unique socket for client to communicate on
                 Socket client = server.accept();
                 counter++;
-                System.out.println("Request " + counter + " incoming");
+                System.out.println("Client " + counter + " incoming");
 
                 // Start a new thread for a connection
                 MyThread t = new MyThread(counter, client, dictionaryAccess);

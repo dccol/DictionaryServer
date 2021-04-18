@@ -54,8 +54,7 @@ public class MainWindow {
     private JTextArea deleteResult;
 
 
-    private String serverIP;
-    private int serverPort;
+    private Socket socket;
 
     /**
      * Launch the window.
@@ -71,16 +70,15 @@ public class MainWindow {
     /**
      * Create the application.
      */
-    public MainWindow(String serverIP, int serverPort) {
-        this.serverIP = serverIP;
-        this.serverPort = serverPort;
-        initialize();
+    public MainWindow(Socket socket) {
+        this.socket = socket;
+        initialize(socket);
     }
 
     /**
      * Initialize the contents of the frame.
      */
-    private void initialize() {
+    private void initialize(Socket socket) {
         frame = new JFrame();
         frame.setBounds(100, 100, 600, 450);
 
@@ -241,7 +239,7 @@ public class MainWindow {
          *      One thread per request on the server **/
         queryButton.addActionListener(arg0 -> {
             // Open a socket per request
-            try(Socket socket = new Socket(serverIP, serverPort))
+            try
             {
                 // Output and Input Stream
                 DataInputStream input = new DataInputStream(socket.getInputStream());
@@ -274,7 +272,7 @@ public class MainWindow {
 
         insertButton.addActionListener(arg0 -> {
             // Open a socket per request
-            try(Socket socket = new Socket(serverIP, serverPort))
+            try
             {
                 // Output and Input Stream
                 DataInputStream input = new DataInputStream(socket.getInputStream());
@@ -305,7 +303,7 @@ public class MainWindow {
 
         updateButton.addActionListener(arg0 -> {
             // Open a socket per request
-            try(Socket socket = new Socket(serverIP, serverPort))
+            try
             {
                 // Output and Input Stream
                 DataInputStream input = new DataInputStream(socket.getInputStream());
@@ -336,7 +334,7 @@ public class MainWindow {
 
         deleteButton.addActionListener(arg0 -> {
             // Open a socket per request
-            try(Socket socket = new Socket(serverIP, serverPort))
+            try
             {
                 // Output and Input Stream
                 DataInputStream input = new DataInputStream(socket.getInputStream());
