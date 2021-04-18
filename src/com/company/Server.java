@@ -1,11 +1,14 @@
+/**
+ * Author: Daniel Coleman, 994887
+ * Date: 18/04/2021
+ * */
+
 package com.company;
 
 import javax.net.ServerSocketFactory;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Server {
 
@@ -61,7 +64,7 @@ public class Server {
                 // Create unique socket for client to communicate on
                 Socket client = server.accept();
                 counter++;
-                System.out.println("CLIENT "+counter+": Applying for connection!");
+                System.out.println("Request " + counter + " incoming");
 
                 // Start a new thread for a connection
                 MyThread t = new MyThread(counter, client, dictionaryAccess);

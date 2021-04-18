@@ -1,3 +1,8 @@
+/**
+ * Author: Daniel Coleman, 994887
+ * Date: 18/04/2021
+ * */
+
 package Exceptions;
 
 public class InvalidCommand extends Throwable {
