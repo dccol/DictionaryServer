@@ -49,7 +49,7 @@ public class ServerInterface {
      */
     private void initialize() {
         frame = new JFrame();
-        frame.setBounds(100, 100, 600, 450);
+        frame.setBounds(100, 100, 100, 80);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Dictionary Server Interface");
@@ -61,7 +61,7 @@ public class ServerInterface {
         contentPane.setLayout(null);
 
         closeButton = new JButton("Shut Down");
-        closeButton.setBounds(270, 65, 150, 21);
+        closeButton.setBounds(15, 10, 120, 21);
         contentPane.add(closeButton);
 
         /** ACTIONS **/
