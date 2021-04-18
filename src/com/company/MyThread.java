@@ -49,25 +49,31 @@ public class MyThread extends Thread{
 
             // Read the client request and perform action, ie. Query, Insert, Delete, Update
             // Client will send json object specifying which method to use and the parameters for that method
-            while(true){
-                if(input.available() > 0) {
-                    // Attempt to convert read data to JSON
-                    JSONObject jsonObject = new JSONObject(input.readUTF());
+            try {
+                while (true) {
+                    if (input.available() > 0) {
+                        // Attempt to convert read data to JSON
+                        JSONObject jsonObject = new JSONObject(input.readUTF());
 
-                    System.out.println("COMMAND RECEIVED:   " + jsonObject.toString());
-                    String result = executeCommand(jsonObject);
-                    output.writeUTF(result.toString());
-                    break;
+                        System.out.println("COMMAND RECEIVED:   " + jsonObject.toString());
+                        String result = executeCommand(jsonObject);
+                        output.writeUTF(result);
+                        break;
+                    }
                 }
             }
+            catch(InvalidCommand e){
+                // Send error back to client
+                output.writeUTF(e.getMessage());
+            }
         }
-        catch (InvalidCommand | IOException | MissingMeaning e) {
+        catch (IOException e) {
             // Send back to client
         }
         System.out.println("Client served, exiting");
     }
 
-    private String executeCommand(org.json.JSONObject jsonObject) throws InvalidCommand, MissingMeaning {
+    private String executeCommand(org.json.JSONObject jsonObject) throws InvalidCommand {
 
         String result;
 
@@ -90,7 +96,7 @@ public class MyThread extends Thread{
                     throw new InvalidCommand("The command does not specify a valid action to perform.");
             }
         }
-        catch (MissingMeaning e) {
+        catch (InvalidCommand e) {
             throw e;
         }
         return result;

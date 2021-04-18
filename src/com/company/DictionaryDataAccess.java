@@ -1,4 +1,5 @@
 package com.company;
+import Exceptions.InvalidCommand;
 import Exceptions.MissingMeaning;
 import Exceptions.WordAlreadyExists;
 import Exceptions.WordNotFound;
@@ -75,10 +76,12 @@ public final class DictionaryDataAccess {
         //System.out.println(txt);
         return txt;
     }
-    public synchronized String QueryDictionary(String query)
+    public synchronized String QueryDictionary(String query) throws InvalidCommand
     {
         // Validate query
-
+        if(query.length() == 0){
+            throw new InvalidCommand("Error: You must enter a word with at least 1 character");
+        }
 
         ArrayList<String> meanings = this.dictionary.get(query);
         if(meanings == null){
@@ -89,18 +92,23 @@ public final class DictionaryDataAccess {
             return meanings.toString();
         }
     }
-    public synchronized String InsertWord(JSONObject insertObject) throws MissingMeaning
+    public synchronized String InsertWord(JSONObject insertObject) throws InvalidCommand
     {
         // Add all meanings into a List
         ArrayList<String> meaningList = new ArrayList<>();
         JSONArray meanings = insertObject.getJSONArray("Meanings");
         for( Object meaning : meanings){
+            if(!meaning.equals(""))
             meaningList.add(meaning.toString());
         }
+        if(insertObject.get("Word").toString().length() == 0){
+            throw new InvalidCommand("Error: You must enter a word with at least 1 character");
+        }
         if(meaningList.size() == 0){
-            throw new MissingMeaning("You must attach at least one meaning to the word you are trying to " +
+            throw new InvalidCommand("Error: You must attach at least one meaning to the word you are trying to " +
                     "insert into the dictionary");
         }
+
 
         ArrayList<String> oldMeanings = dictionary.get(insertObject.get("Word").toString());
         if(oldMeanings == null){
@@ -114,8 +122,12 @@ public final class DictionaryDataAccess {
         }
     }
 
-    public synchronized String DeleteWord(String word)
+    public synchronized String DeleteWord(String word) throws InvalidCommand
     {
+        // Validate query
+        if(word.length() == 0){
+            throw new InvalidCommand("Error: You must enter a word with at least 1 character");
+        }
 
         ArrayList<String> deletedMeanings = this.dictionary.remove(word);
 
@@ -125,18 +137,23 @@ public final class DictionaryDataAccess {
         }
         return "Success";
     }
-    public synchronized String UpdateMeaning(JSONObject updateObject) throws MissingMeaning
+    public synchronized String UpdateMeaning(JSONObject updateObject) throws InvalidCommand
     {
         // Replace current list of meanings with new one specified
         ArrayList<String> meaningList = new ArrayList<>();
         JSONArray meanings = updateObject.getJSONArray("Meanings");
         for( Object meaning : meanings){
-            meaningList.add(meaning.toString());
+            if(!meaning.equals("")) {
+                meaningList.add(meaning.toString());
+            }
         }
 
+        if(updateObject.get("Word").toString().length() == 0){
+            throw new InvalidCommand("Error: You must enter a word with at least 1 character");
+        }
         if(meaningList.size() == 0){
-            throw new MissingMeaning("You must attach at least one meaning to the word you are trying to " +
-                    "update");
+            throw new InvalidCommand("Error: You must attach at least one meaning to the word you are trying to " +
+                    "insert into the dictionary");
         }
 
         ArrayList<String> oldMeanings = this.dictionary.replace(updateObject.get("Word").toString(), meaningList);

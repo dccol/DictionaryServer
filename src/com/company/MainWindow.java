@@ -115,8 +115,12 @@ public class MainWindow {
         contentPane.add(queryButton);
 
         queryResult = new JTextArea();
-        queryResult.setBounds(10, 90, 200, 60);
+        queryResult.setBounds(10, 90, 270, 60);
         contentPane.add(queryResult);
+        JScrollPane scrollPaneQueryResult = new JScrollPane( queryResult );
+        scrollPaneQueryResult.setBounds(10, 90, 270, 60);
+        scrollPaneQueryResult.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        contentPane.add(scrollPaneQueryResult);
 
         /** INSERT **/
         JLabel insertLabel = new JLabel("Insert");
@@ -141,6 +145,7 @@ public class MainWindow {
         insertWordMeanings = new JTextArea();
         insertWordMeanings.setBounds(300, 230, 200, 50);
         JScrollPane scrollPane = new JScrollPane( insertWordMeanings );
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setBounds(300, 230, 270, 60);
         contentPane.add(scrollPane);
         //contentPane.add(insertWordMeanings);
@@ -153,6 +158,10 @@ public class MainWindow {
         insertResult = new JTextArea();
         insertResult.setBounds(300, 315, 270, 60);
         contentPane.add(insertResult);
+        JScrollPane scrollPaneInsertResult = new JScrollPane( insertResult );
+        scrollPaneInsertResult.setBounds(300, 315, 270, 60);
+        scrollPaneInsertResult.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        contentPane.add(scrollPaneInsertResult);
 
         /** UPDATE **/
         JLabel updateLabel = new JLabel("Update");
@@ -177,6 +186,7 @@ public class MainWindow {
         updateMeaningField = new JTextArea();
         updateMeaningField.setBounds(10, 230, 200, 50);
         JScrollPane scrollPane2 = new JScrollPane( updateMeaningField );
+        scrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane2.setBounds(10, 230, 200, 60);
         contentPane.add(scrollPane2);
         //contentPane.add(updateMeaningField);
@@ -189,6 +199,10 @@ public class MainWindow {
         updateResult = new JTextArea();
         updateResult.setBounds(10, 315, 270, 60);
         contentPane.add(updateResult);
+        JScrollPane scrollPaneUpdateResult = new JScrollPane( updateResult );
+        scrollPaneUpdateResult.setBounds(10, 315, 270, 60);
+        scrollPaneUpdateResult.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        contentPane.add(scrollPaneUpdateResult);
 
         /** DELETE **/
         JLabel deleteLabel = new JLabel("Delete");
@@ -212,8 +226,12 @@ public class MainWindow {
         contentPane.add(deleteButton);
 
         deleteResult = new JTextArea();
-        deleteResult.setBounds(300, 90, 200, 60);
+        deleteResult.setBounds(300, 90, 270, 60);
         contentPane.add(deleteResult);
+        JScrollPane scrollPaneDeleteResult = new JScrollPane( deleteResult );
+        scrollPaneDeleteResult.setBounds(300, 90, 270, 60);
+        scrollPaneDeleteResult.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        contentPane.add(scrollPaneDeleteResult);
 
         /** ACTIONS
          *      Send Requests to the Server
@@ -242,8 +260,13 @@ public class MainWindow {
                 // Read result from server
                 String message = input.readUTF();
                 queryResult.setText(null);
-                queryResult.append(message + "\n");
 
+                // Format result
+                String[] meanings = message.replace("[", "").replace("]", "").split(", ");
+                for(String meaning : meanings){
+                    queryResult.append(meaning + "\n");
+
+                }
             } catch (IOException e) {
                 System.out.println("Exception sending data");
             }
