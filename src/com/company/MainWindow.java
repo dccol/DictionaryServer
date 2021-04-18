@@ -5,14 +5,11 @@ import org.json.JSONObject;
 import java.awt.*;
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.font.TextAttribute;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Map;
 
 public class MainWindow {
@@ -93,7 +90,7 @@ public class MainWindow {
         contentPane.setLayout(null);
 
 
-        /** QUERY **/
+        /* QUERY **/
         queryLabel = new JLabel("Query");
         Font font = queryLabel.getFont();
         Map attributes = font.getAttributes();
@@ -122,7 +119,7 @@ public class MainWindow {
         scrollPaneQueryResult.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         contentPane.add(scrollPaneQueryResult);
 
-        /** INSERT **/
+        /* INSERT **/
         JLabel insertLabel = new JLabel("Insert");
         Font font2 = insertLabel.getFont();
         Map attributes2 = font2.getAttributes();
@@ -163,7 +160,7 @@ public class MainWindow {
         scrollPaneInsertResult.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         contentPane.add(scrollPaneInsertResult);
 
-        /** UPDATE **/
+        /* UPDATE **/
         JLabel updateLabel = new JLabel("Update");
         Font font3 = updateLabel.getFont();
         Map attributes3 = font3.getAttributes();
@@ -204,7 +201,7 @@ public class MainWindow {
         scrollPaneUpdateResult.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         contentPane.add(scrollPaneUpdateResult);
 
-        /** DELETE **/
+        /* DELETE **/
         JLabel deleteLabel = new JLabel("Delete");
         Font font4 = deleteLabel.getFont();
         Map attributes4 = font4.getAttributes();
@@ -233,9 +230,9 @@ public class MainWindow {
         scrollPaneDeleteResult.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         contentPane.add(scrollPaneDeleteResult);
 
-        /** ACTIONS
+        /* ACTIONS
          *      Send Requests to the Server
-         *      One request per socket
+         *      Creates new socket request
          *      One thread per request on the server **/
         queryButton.addActionListener(arg0 -> {
             // Open a socket per request
@@ -245,10 +242,9 @@ public class MainWindow {
                 DataInputStream input = new DataInputStream(socket.getInputStream());
                 DataOutputStream output = new DataOutputStream(socket.getOutputStream());
 
-                // Send the client request ie. Query, Insert, Delete, Update.
+                // Send the client request ie. Query
                 JSONObject obj = new JSONObject();
 
-                // Query test
                 obj.put("Word", queryWordField.getText());
                 obj.put("Method", "Query");
 
@@ -279,7 +275,7 @@ public class MainWindow {
                 DataInputStream input = new DataInputStream(socket.getInputStream());
                 DataOutputStream output = new DataOutputStream(socket.getOutputStream());
 
-                // Send the client request ie. Query, Insert, Delete, Update.
+                // Send the client request ie. Insert
                 JSONObject obj = new JSONObject();
 
                 String[] meanings  = insertWordMeanings.getText().split("\n");
@@ -310,7 +306,7 @@ public class MainWindow {
                 DataInputStream input = new DataInputStream(socket.getInputStream());
                 DataOutputStream output = new DataOutputStream(socket.getOutputStream());
 
-                // Send the client request ie. Query, Insert, Delete, Update.
+                // Send the client request ie. Update.
                 JSONObject obj = new JSONObject();
 
                 String[] meanings  = updateMeaningField.getText().split("\n");
@@ -341,10 +337,9 @@ public class MainWindow {
                 DataInputStream input = new DataInputStream(socket.getInputStream());
                 DataOutputStream output = new DataOutputStream(socket.getOutputStream());
 
-                // Send the client request ie. Query, Insert, Delete, Update.
+                // Send the client request ie. Delete.
                 JSONObject obj = new JSONObject();
 
-                // Query test
                 obj.put("Word", deleteWordField.getText());
                 obj.put("Method", "Delete");
 

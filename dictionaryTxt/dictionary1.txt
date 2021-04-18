@@ -2,5 +2,7 @@ Java	is not cool
 Java	and smells
 Big	large
 Apple	is round
+Jar	can
+Jar	ting
 Orange	is a fruit
 Orange	is a colour

@@ -21,7 +21,7 @@ public class Server {
 
     public static void main(String[] args) {
 
-        // READ IN COMMAND LINE ARGS
+        // Validate commandline args
         if(args.length < 2){
             System.out.println("Missing Arguments. Please Try Again");
             System.exit(0);
@@ -44,6 +44,7 @@ public class Server {
         // Create Dictionary
         DictionaryDataAccess dictionaryAccess = DictionaryDataAccess.getInstance(fileName);
 
+        // Open Server GUI to allow Server Shut Down
         window = new ServerInterface(dictionaryAccess, fileName);
         window.run();
 
@@ -70,7 +71,7 @@ public class Server {
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            System.out.println("Error: Welcome Socket closed");
         }
     }
 

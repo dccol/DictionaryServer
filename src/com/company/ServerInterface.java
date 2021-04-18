@@ -1,19 +1,7 @@
 package com.company;
 
-import org.json.JSONObject;
-
 import java.awt.*;
-
 import javax.swing.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.font.TextAttribute;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Map;
 
 public class ServerInterface {
 
@@ -49,19 +37,19 @@ public class ServerInterface {
      */
     private void initialize() {
         frame = new JFrame();
-        frame.setBounds(100, 100, 100, 80);
+        frame.setBounds(100, 100, 350, 80);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Dictionary Server Interface");
         frame.setResizable(false);
-        frame.getContentPane().setBackground(Color.black);
+        frame.getContentPane().setBackground(Color.BLUE);
 
         contentPane = new JPanel();
         frame.setContentPane(contentPane);
         contentPane.setLayout(null);
 
         closeButton = new JButton("Shut Down");
-        closeButton.setBounds(15, 10, 120, 21);
+        closeButton.setBounds(10, 10, 120, 21);
         contentPane.add(closeButton);
 
         /** ACTIONS **/

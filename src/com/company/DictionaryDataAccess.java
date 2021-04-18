@@ -1,11 +1,5 @@
 package com.company;
 import Exceptions.InvalidCommand;
-import Exceptions.MissingMeaning;
-import Exceptions.WordAlreadyExists;
-import Exceptions.WordNotFound;
-import netscape.javascript.JSObject;
-
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -14,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,6 +18,10 @@ public final class DictionaryDataAccess {
 
     private final HashMap<String, ArrayList<String>> dictionary;
 
+    /**
+     * Singleton Data Access to ensure each thread behaves in a synchronous manner
+     * @param fileName
+     */
     private DictionaryDataAccess(String fileName){
         this.dictionary = createDictionary(fileName);
     }
@@ -34,6 +31,12 @@ public final class DictionaryDataAccess {
         }
         return instance;
     }
+
+    /**
+     * Creates dictionary data structure
+     * @param fileName
+     * @return
+     */
     private static HashMap<String, ArrayList<String>> createDictionary(String fileName)
     {
         try {
@@ -67,6 +70,12 @@ public final class DictionaryDataAccess {
             return null;
         }
     }
+
+    /**
+     * Reads in dictionary text file
+     * @param fileName
+     * @return
+     */
     private static String readDictionaryTextFile(String fileName)
     {
         // Open Text File
@@ -86,6 +95,10 @@ public final class DictionaryDataAccess {
         return txt;
     }
 
+    /**
+     * Saves the state of the dictionary into tab delimited test file upon server shut down
+     * @param filename
+     */
     public void saveDictionaryToFile(String filename)
     {
         try {
@@ -105,9 +118,15 @@ public final class DictionaryDataAccess {
         }
     }
 
+    /**
+     * Query a word from the dictionary
+     * @param query
+     * @return
+     * @throws InvalidCommand
+     */
     public synchronized String queryDictionary(String query) throws InvalidCommand
     {
-        // Validate query
+        // Validate command
         if(query.length() == 0){
             throw new InvalidCommand("Error: You must enter a word with at least 1 character");
         }
@@ -115,12 +134,18 @@ public final class DictionaryDataAccess {
         ArrayList<String> meanings = this.dictionary.get(query);
         if(meanings == null){
             return "Word Not Found";
-//            throw new WordNotFound("The word you are looking for can not be found. Please insert the word," +
-//                    "or query another word.");
-        }else{
+        }
+        else{
             return meanings.toString();
         }
     }
+
+    /**
+     * Insert a word into dictionary
+     * @param insertObject
+     * @return
+     * @throws InvalidCommand
+     */
     public synchronized String insertWord(JSONObject insertObject) throws InvalidCommand
     {
         // Add all meanings into a List
@@ -130,6 +155,7 @@ public final class DictionaryDataAccess {
             if(!meaning.equals(""))
             meaningList.add(meaning.toString());
         }
+        // Validate command
         if(insertObject.get("Word").toString().length() == 0){
             throw new InvalidCommand("Error: You must enter a word with at least 1 character");
         }
@@ -146,14 +172,18 @@ public final class DictionaryDataAccess {
         }
         else{
             return "Word Already Exists";
-//            throw new WordAlreadyExists("The word you are trying to Insert already exists in the dictionary. " +
-//                    "Please use the update functionality if you wish to overwrite it's current meanings.");
         }
     }
 
+    /**
+     * Delete word from dictionary
+     * @param word
+     * @return
+     * @throws InvalidCommand
+     */
     public synchronized String deleteWord(String word) throws InvalidCommand
     {
-        // Validate query
+        // Validate command
         if(word.length() == 0){
             throw new InvalidCommand("Error: You must enter a word with at least 1 character");
         }
@@ -162,10 +192,16 @@ public final class DictionaryDataAccess {
 
         if(deletedMeanings == null){
             return "Word Not Found";
-            //throw new WordNotFound("The word you are trying to delete could not be found.");
         }
         return "Success";
     }
+
+    /**
+     * Update word meanings in dictionary
+     * @param updateObject
+     * @return
+     * @throws InvalidCommand
+     */
     public synchronized String updateMeaning(JSONObject updateObject) throws InvalidCommand
     {
         // Replace current list of meanings with new one specified
@@ -177,6 +213,7 @@ public final class DictionaryDataAccess {
             }
         }
 
+        // Validate command
         if(updateObject.get("Word").toString().length() == 0){
             throw new InvalidCommand("Error: You must enter a word with at least 1 character");
         }
@@ -188,7 +225,6 @@ public final class DictionaryDataAccess {
         ArrayList<String> oldMeanings = this.dictionary.replace(updateObject.get("Word").toString(), meaningList);
         if(oldMeanings == null){
             return "Word Not Found";
-            //throw new WordNotFound("The word you are trying to update does not exist.");
         }
         else {
             return "Success";

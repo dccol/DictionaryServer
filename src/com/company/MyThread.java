@@ -1,18 +1,12 @@
 package com.company;
 
 import Exceptions.InvalidCommand;
-import Exceptions.MissingMeaning;
-import Exceptions.WordAlreadyExists;
-import Exceptions.WordNotFound;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class MyThread extends Thread{
 
@@ -35,9 +29,14 @@ public class MyThread extends Thread{
     public void run()
     {
         serveClient(socket);
-        System.out.println(threadName + " exiting.");
+        System.out.println("Client served, " + threadName +  " exiting");
     }
 
+    /**
+     * Read client command and execute action on dictionary
+     * Return status of operation or result of query
+     * @param client
+     */
     private void serveClient(Socket client)
     {
         try(Socket clientSocket = client)
@@ -68,36 +67,31 @@ public class MyThread extends Thread{
             }
         }
         catch (IOException e) {
-            // Send back to client
+            // Socket error
+            System.out.println(threadName + " socket closed, unable to send client data");
         }
-        System.out.println("Client served, exiting");
     }
 
     private String executeCommand(org.json.JSONObject jsonObject) throws InvalidCommand {
 
         String result;
 
-        try {
-            String method = (String) jsonObject.get("Method");
-            switch (method) {
-                case "Query":
-                    result = dataAccess.queryDictionary(jsonObject.get("Word").toString());
-                    break;
-                case "Insert":
-                    result = dataAccess.insertWord(jsonObject);
-                    break;
-                case "Delete":
-                    result = dataAccess.deleteWord(jsonObject.get("Word").toString());
-                    break;
-                case "Update":
-                    result = dataAccess.updateMeaning(jsonObject);
-                    break;
-                default:
-                    throw new InvalidCommand("The command does not specify a valid action to perform.");
-            }
-        }
-        catch (InvalidCommand e) {
-            throw e;
+        String method = (String) jsonObject.get("Method");
+        switch (method) {
+            case "Query":
+                result = dataAccess.queryDictionary(jsonObject.get("Word").toString());
+                break;
+            case "Insert":
+                result = dataAccess.insertWord(jsonObject);
+                break;
+            case "Delete":
+                result = dataAccess.deleteWord(jsonObject.get("Word").toString());
+                break;
+            case "Update":
+                result = dataAccess.updateMeaning(jsonObject);
+                break;
+            default:
+                throw new InvalidCommand("The command does not specify a valid action to perform.");
         }
         return result;
     }

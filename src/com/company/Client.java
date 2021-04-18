@@ -1,15 +1,9 @@
 package com.company;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class Client {
 
