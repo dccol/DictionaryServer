@@ -237,10 +237,8 @@ public class MainWindow {
 
         /* ACTIONS
          *      Send Requests to the Server
-         *      Creates new socket request
-         *      One thread per request on the server **/
+         *      Same thread handles each request to the server **/
         queryButton.addActionListener(arg0 -> {
-            // Open a socket per request
             try
             {
                 // Output and Input Stream
@@ -273,7 +271,6 @@ public class MainWindow {
         });
 
         insertButton.addActionListener(arg0 -> {
-            // Open a socket per request
             try
             {
                 // Output and Input Stream
@@ -304,7 +301,6 @@ public class MainWindow {
         });
 
         updateButton.addActionListener(arg0 -> {
-            // Open a socket per request
             try
             {
                 // Output and Input Stream
@@ -335,7 +331,6 @@ public class MainWindow {
         });
 
         deleteButton.addActionListener(arg0 -> {
-            // Open a socket per request
             try
             {
                 // Output and Input Stream
@@ -383,7 +378,7 @@ public class MainWindow {
                     output.flush();
 
                 } catch (IOException ex) {
-                    //
+                    System.out.print("Error: Connection closed while exiting");
                 }
                 System.out.println("Closed");
                 e.getWindow().dispose();

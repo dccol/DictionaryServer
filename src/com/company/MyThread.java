@@ -76,7 +76,7 @@ public class MyThread extends Thread{
         }
         catch (IOException e) {
             // Socket error
-            System.out.println(threadName + " socket closed, unable to send client data");
+            System.out.println("Error: " + threadName + " socket closed, unable to send client data");
         }
     }
 
