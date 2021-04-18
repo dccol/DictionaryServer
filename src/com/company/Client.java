@@ -40,7 +40,6 @@ public class Client {
             System.exit(0);
         }
 
-        // Test server before proceeding
         try{
             Socket socket = new Socket(serverIp, serverPort);
             // Open GUI
@@ -53,6 +52,5 @@ public class Client {
             System.out.println("Connection Refused.");
             System.exit(0);
         }
-        System.out.println("Client exiting");
     }
 }
