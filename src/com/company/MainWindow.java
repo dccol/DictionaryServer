@@ -10,6 +10,8 @@ import org.json.JSONObject;
 import java.awt.*;
 
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.font.TextAttribute;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -357,6 +359,34 @@ public class MainWindow {
 
             } catch (IOException e) {
                 deleteResult.setText("Error: The Client has lost connection to the Server");
+            }
+        });
+
+        frame.addWindowListener(new WindowAdapter()
+        {
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                try
+                {
+                    // Output and Input Stream
+                    DataInputStream input = new DataInputStream(socket.getInputStream());
+                    DataOutputStream output = new DataOutputStream(socket.getOutputStream());
+
+                    // Send the client request ie. Delete.
+                    JSONObject obj = new JSONObject();
+
+                    obj.put("Method", "Close");
+
+                    System.out.println("Data sent to Server--> " + obj.toString());
+                    output.writeUTF(obj.toString());
+                    output.flush();
+
+                } catch (IOException ex) {
+                    //
+                }
+                System.out.println("Closed");
+                e.getWindow().dispose();
             }
         });
     }

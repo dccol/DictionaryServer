@@ -61,7 +61,11 @@ public class MyThread extends Thread{
 
                         System.out.println("COMMAND RECEIVED:   " + jsonObject.toString());
                         String result = executeCommand(jsonObject);
+                        if(result.equals("Close")){
+                            break;
+                        }
                         output.writeUTF(result);
+
                         //break;
                     }catch(InvalidCommand e){
                         // Send error back to client
@@ -93,6 +97,9 @@ public class MyThread extends Thread{
                 break;
             case "Update":
                 result = dataAccess.updateMeaning(jsonObject);
+                break;
+            case "Close":
+                result = "Close";
                 break;
             default:
                 throw new InvalidCommand("The command does not specify a valid action to perform.");
